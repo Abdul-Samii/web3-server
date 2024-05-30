@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Project } from './interfaces/project.interface';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { CoreCategory } from 'src/core-category/interfaces/core-category.interface';
@@ -40,6 +40,22 @@ export class ProjectService {
 
   async findOne(id: string): Promise<Project> {
     return this.projectModel.findOne({ _id: id }).populate([
+      { path: 'coreCategories', model: 'coreCategory' },
+      { path: 'tags', model: 'tag' },
+    ]);
+  }
+
+  async searchProjects(searchValue: string): Promise<Project[]> {
+    const searchQuery: any = {};
+  
+    if (searchValue) {
+      searchQuery.$or = [
+        { name: { $regex: searchValue, $options: 'i' } },
+        { overview: { $regex: searchValue, $options: 'i' } }
+      ];
+    }
+
+    return this.projectModel.find(searchQuery).populate([
       { path: 'coreCategories', model: 'coreCategory' },
       { path: 'tags', model: 'tag' },
     ]);

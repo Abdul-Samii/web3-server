@@ -13,8 +13,8 @@ export class AppService {
     @InjectModel('coreCategory') private readonly coreCategoryModel: Model<CoreCategory>,
     @InjectModel('tag') private readonly tagModel: Model<Tag>
   ) {
-    // const seedService = new SeedService(projectModel, coreCategoryModel, tagModel);
-    // seedService.seed()
+    const seedService = new SeedService(projectModel, coreCategoryModel, tagModel);
+    seedService.seed()
   }
   getHello(): string {
     return 'Hello World!';

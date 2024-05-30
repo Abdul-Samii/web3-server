@@ -21,4 +21,10 @@ export class ProjectController {
   async findOne(@Param('id') id: string): Promise<Project> {
     return this.projectService.findOne(id);
   }
+
+  @Post('search')
+  async searchProjects(@Body() searchDto: any): Promise<Project[]> {
+    console.log(searchDto)
+    return this.projectService.searchProjects(searchDto.searchValue);
+  }
 }
